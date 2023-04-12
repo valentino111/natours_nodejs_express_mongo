@@ -31,12 +31,12 @@ exports.getAllTours = catchAsync(async (req, res, next) => {
 });
 
 function double(num) {
-  return num * 2;
+  num * 2;
 }
 
 exports.getTour = catchAsync(async (req, res, next) => {
   let num = 2;
-  num = double(num);
+  double(num);
   console.log(num);
 
   // const tour = await Tour.findOne({ _id: req.params.id });
