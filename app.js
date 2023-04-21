@@ -14,11 +14,11 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 app.use(expess.json());
-
 app.use(expess.static(`${__dirname}/public`));
 
 app.use((req, res, next) => {
   console.log('Hello form the middleware!');
+  console.log(req.headers);
   next();
 });
 
