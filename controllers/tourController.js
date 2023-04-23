@@ -30,15 +30,7 @@ exports.getAllTours = catchAsync(async (req, res, next) => {
   });
 });
 
-function double(num) {
-  num * 2;
-}
-
 exports.getTour = catchAsync(async (req, res, next) => {
-  let num = 2;
-  double(num);
-  console.log(num);
-
   // const tour = await Tour.findOne({ _id: req.params.id });
   const tour = await Tour.findById(req.params.id);
 
