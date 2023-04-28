@@ -11,6 +11,18 @@ const signToken = (id) =>
     expiresIn: process.env.JWT_EXPIRES_IN,
   });
 
+const createSendToken = (user, statusCode, res) => {
+  const token = signToken(user._id);
+
+  res.status(statusCode).json({
+    status: 'success',
+    token,
+    data: {
+      user,
+    },
+  });
+};
+
 exports.signup = catchAsync(async (req, res, next) => {
   const newUser = await User.create({
     name: req.body.name,
@@ -21,15 +33,7 @@ exports.signup = catchAsync(async (req, res, next) => {
     role: req.body.role,
   });
 
-  const token = signToken(newUser._id);
-
-  res.status(201).json({
-    status: 'success',
-    token,
-    data: {
-      user: newUser,
-    },
-  });
+  createSendToken(newUser, 201, res);
 });
 
 exports.login = catchAsync(async (req, res, next) => {
@@ -50,12 +54,7 @@ exports.login = catchAsync(async (req, res, next) => {
   }
 
   // 3) If everything is ok, send the token to the client
-  const token = signToken(user._id);
-
-  res.status(200).json({
-    status: 'success',
-    token,
-  });
+  createSendToken(user, 200, res);
 });
 
 exports.protect = catchAsync(async (req, res, next) => {
@@ -182,13 +181,42 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
 
   // 3) Update the changedPasswordAt property for the user
   // 4) Log the user in, send JWT
-  const token = signToken(user._id);
+  createSendToken(user, 200, res);
+});
 
-  res.status(200).json({
-    status: 'success',
-    token,
-    data: {
-      user: user,
-    },
-  });
+exports.updatePassword = catchAsync(async (req, res, next) => {
+  const { email, password, newPassword, newPasswordConfirm } = req.body;
+  if (
+    !email ||
+    !password ||
+    !newPassword ||
+    !newPassword ||
+    !newPasswordConfirm
+  ) {
+    return next(
+      new AppError(
+        'Please provide email, password, newPassword and newPasswordConfirm!',
+        400
+      )
+    );
+  }
+  // 1) Get User from collection
+  const user = await User.findOne({ email }).select('+password');
+
+  // console.log(user);
+
+  // 2) Check if the POSTed password is correct
+
+  if (!user || !(await user.correctPassword(password, user.password))) {
+    return next(new AppError('Incorrect email or password!', 401));
+  }
+
+  // 3) If so, update password
+  user.password = newPassword;
+  user.passwordConfirm = newPasswordConfirm;
+  await user.save();
+  // User.findByIdAndUpdate will NOT work
+
+  // 4) Log user in , send JWT
+  createSendToken(user, 200, res);
 });
