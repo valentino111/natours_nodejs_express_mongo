@@ -8,11 +8,8 @@ const reviewSchema = new mongoose.Schema(
       type: String,
       required: [true, 'A review must have a content'],
 
-      maxlength: [
-        200,
-        'A tour name must have less or equal then 200 characters',
-      ],
-      minlength: [10, 'A tour name must have more or equal then 10 characters'],
+      maxlength: [200, 'A review must have less or equal then 200 characters'],
+      minlength: [5, 'A review must have more then 5 characters'],
     },
     slug: String,
     rating: {
@@ -21,7 +18,7 @@ const reviewSchema = new mongoose.Schema(
       min: 1,
       max: 5,
     },
-    createsAt: {
+    createdAt: {
       type: Date,
       default: Date.now(),
       select: true,
