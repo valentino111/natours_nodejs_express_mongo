@@ -63,6 +63,12 @@ const userSchema = new mongoose.Schema({
     default: true,
     select: false,
   },
+  reviews: [
+    {
+      type: mongoose.Schema.ObjectId,
+      ref: 'Review',
+    },
+  ],
 });
 
 userSchema.pre('save', async function (next) {
@@ -85,6 +91,14 @@ userSchema.pre('save', async function (next) {
 userSchema.pre(/^find/, function (next) {
   //"this" points to the current query
   this.find({ active: { $ne: false } });
+  next();
+});
+
+userSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: 'reviews',
+    // select: '-__v',
+  });
   next();
 });
 
