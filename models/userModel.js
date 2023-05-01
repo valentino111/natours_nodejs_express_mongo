@@ -63,12 +63,12 @@ const userSchema = new mongoose.Schema({
     default: true,
     select: false,
   },
-  reviews: [
-    {
-      type: mongoose.Schema.ObjectId,
-      ref: 'Review',
-    },
-  ],
+  // reviews: [
+  //   {
+  //     type: mongoose.Schema.ObjectId,
+  //     ref: 'Review',
+  //   },
+  // ],
 });
 
 userSchema.pre('save', async function (next) {
@@ -94,13 +94,13 @@ userSchema.pre(/^find/, function (next) {
   next();
 });
 
-userSchema.pre(/^find/, function (next) {
-  this.populate({
-    path: 'reviews',
-    // select: '-__v',
-  });
-  next();
-});
+// userSchema.pre(/^find/, function (next) {
+//   this.populate({
+//     path: 'reviews',
+//     // select: '-__v',
+//   });
+//   next();
+// });
 
 userSchema.methods.correctPassword = async function (
   candidatePassword,
