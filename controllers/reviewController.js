@@ -18,8 +18,6 @@ exports.getAllReviews = catchAsync(async (req, res, next) => {
   //   // EXECUTE THE QUERY
   //   const reviews = await features.query;
 
-  // TEST Commit
-
   // SEND RESPONSE
   res.status(200).json({
     status: 'success',
