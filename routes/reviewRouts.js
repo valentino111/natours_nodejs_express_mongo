@@ -19,7 +19,7 @@ router
   .patch(reviewController.updateReview)
   .delete(
     authController.protect,
-    authController.restrictTo('admin'),
+    authController.restrictTo('admin', 'user'),
     reviewController.deleteReview
   );
 

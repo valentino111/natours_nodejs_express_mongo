@@ -1,24 +1,13 @@
 const Review = require('../models/reviewModel');
-const APIFeatures = require('../utils/apiFeatures');
 const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
+const factory = require('./handlerFactory');
 
 exports.getAllReviews = catchAsync(async (req, res, next) => {
   let filter = {};
   if (req.params.tourId) filter = { tour: req.params.tourId };
 
   const reviews = await Review.find(filter);
-
-  //   // BUILD THE QUERY
-  //   const features = new APIFeatures(Review.find(), req.query)
-  //     .filter()
-  //     .sort()
-  //     .limitFields()
-  //     .paginate();
-  //   // EXECUTE THE QUERY
-  //   const reviews = await features.query;
-
-  // Test Commit 2
 
   // SEND RESPONSE
   res.status(200).json({
@@ -78,15 +67,4 @@ exports.updateReview = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.deleteReview = catchAsync(async (req, res, next) => {
-  const review = await Review.findByIdAndDelete(req.params.id);
-
-  if (!review) {
-    return next(new AppError('No review found with that ID', 404));
-  }
-
-  res.status(204).json({
-    status: 'success',
-    data: null,
-  });
-});
+exports.deleteReview = factory.deleteOne(Review);
