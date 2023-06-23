@@ -1,6 +1,7 @@
 const nodemailer = require('nodemailer');
 const pug = require('pug');
 const htmlToText = require('html-to-text');
+// import { htmToText } from 'html-to-text';
 
 module.exports = class Email {
   constructor(user, url) {
@@ -31,7 +32,7 @@ module.exports = class Email {
   async send(template, subject) {
     // 1) Render HTML based on a pug template
     const html = pug.renderFile(
-      `${__dirname}/../veiws/emails/${template}.pug`,
+      `${__dirname}/../views/emails/${template}.pug`,
       {
         firstName: this.firstName,
         url: this.url,
@@ -44,7 +45,9 @@ module.exports = class Email {
       from: this.from,
       to: this.to,
       subject,
+      html,
       text: htmlToText.fromString(html),
+      // text: htmlToText.from(html),
       // html:
     };
 
