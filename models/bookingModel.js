@@ -20,7 +20,7 @@ const bookingSchema = new mongoose.Schema({
     default: Date.now(),
   },
   paid: {
-    typr: Boolean,
+    type: Boolean,
     default: true,
   },
 });
