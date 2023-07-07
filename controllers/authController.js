@@ -60,7 +60,7 @@ exports.signup = catchAsync(async (req, res, next) => {
   });
 
   const url = `${req.protocol}://${req.get('host')}/me`;
-  console.log(url);
+  // console.log(url);
 
   await new Email(newUser, url).sendWelcome();
 
@@ -116,11 +116,11 @@ exports.protect = catchAsync(async (req, res, next) => {
 
   // 2) Verification of the token
   const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
-  console.log('Decoded: ', decoded);
+  // console.log('Decoded: ', decoded);
 
   // 3) Check if user still exists
   const currentUser = await User.findById(decoded.id);
-  console.log(currentUser);
+  // console.log(currentUser);
   if (!currentUser) {
     return next(
       new AppError('The user belonging to this token is no longer exists.', 401)
@@ -149,7 +149,7 @@ exports.isLoggedIn = async (req, res, next) => {
         req.cookies.jwt,
         process.env.JWT_SECRET
       );
-      console.log('Decoded: ', decoded);
+      // console.log('Decoded: ', decoded);
 
       // 2) Check if user still exists
       const currentUser = await User.findById(decoded.id);
@@ -294,7 +294,7 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
 });
 
 exports.updateMyPassword = catchAsync(async (req, res, next) => {
-  console.log('Inside updateMyPassword.');
+  // console.log('Inside updateMyPassword.');
   // 1) Get user from collection
   const user = await User.findById(req.user.id).select('+password');
 

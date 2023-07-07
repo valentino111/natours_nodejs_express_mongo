@@ -19,7 +19,7 @@ class APIFeatures {
 
     let queryStr = JSON.stringify(queryObj);
     queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);
-    console.log('\n', 'queryStr: ', JSON.parse(queryStr));
+    // console.log('\n', 'queryStr: ', JSON.parse(queryStr));
 
     this.query = this.query.find(JSON.parse(queryStr));
     // let query = Tour.find(JSON.parse(queryStr));
@@ -29,9 +29,9 @@ class APIFeatures {
 
   sort() {
     if (this.queryString.sort) {
-      console.log('\n', 'req.query.sort: ', this.queryString.sort);
+      // console.log('\n', 'req.query.sort: ', this.queryString.sort);
       const sortBy = this.queryString.sort.split(',').join(' ');
-      console.log('\n', 'sortBy: ', sortBy);
+      // console.log('\n', 'sortBy: ', sortBy);
       this.query = this.query.sort(sortBy);
     } else {
       this.query = this.query.sort('-createsAt');
@@ -41,7 +41,7 @@ class APIFeatures {
 
   limitFields() {
     if (this.queryString.fields) {
-      console.log('\n', 'req.query.fields: ', this.queryString.fields);
+      // console.log('\n', 'req.query.fields: ', this.queryString.fields);
       const fields = this.queryString.fields.split(',').join(' ');
       this.query = this.query.select(fields);
     } else {

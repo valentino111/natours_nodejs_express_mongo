@@ -41,7 +41,7 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
   }
 
   let price = await getPricesByProductId(product.id);
-  console.log('Price:', price);
+  //   console.log('Price:', price);
 
   if (!price) {
     // Create a price object
