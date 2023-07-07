@@ -17,6 +17,8 @@ async function getPricesByProductId(productId) {
 async function getProductByName(name) {
   const products = await stripe.products.list();
 
+  console.log('Products: ', products);
+
   const product = products.data.find((prod) => prod.name === name);
 
   if (!product) {
@@ -37,12 +39,14 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
     product = await stripe.products.create({
       name: tour.name, // Replace with your desired product name
       description: tour.description, // Optional: Replace with your product description
-      images: [`https://www.natours.dev/img/tours/${tour.imageCover}`], // Optional: Replace with your product image URL(s)
+      images: [
+        `${req.protocol}://${req.get('host')}/img/tours/${tour.imageCover}`,
+      ], // Optional: Replace with your product image URL(s)
     });
   }
 
   let price = await getPricesByProductId(product.id);
-  //   console.log('Price:', price);
+  console.log('Price on getPricesByProductId: ', price);
 
   if (!price) {
     // Create a price object
@@ -91,12 +95,15 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
 // });
 
 const createBookingCheckout = async (session) => {
+  console.log('Incide createBookingCheckout!');
   const tour = session.client_reference_id;
   const user = (await User.findOne({ email: session.customer_email })).id;
-  const priceObj = await stripe.prices.retrieve(session.line_items[0].price);
-  console.log('line_items: ', session.line_items[0]);
-  console.log('priceObj: ', priceObj);
-  const price = priceObj.unit_amount / 100;
+  // const priceObj = await stripe.prices.retrieve(session.line_items[0].price);
+  // console.log('line_items: ', session.line_items[0]);
+  // console.log('priceObj: ', priceObj);
+  // const price = priceObj.unit_amount / 100;
+  const price = session.amount_total / 100;
+  console.log('Price on createBookingCheckout: ', price);
   await Booking.create({ tour, user, price });
 };
 
