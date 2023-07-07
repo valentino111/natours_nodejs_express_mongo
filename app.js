@@ -10,6 +10,7 @@ const xss = require('xss-clean');
 const hpp = require('hpp');
 const cookieParser = require('cookie-parser');
 const compression = require('compression');
+const cors = require('cors');
 
 const tourRouter = require('./routes/tourRouts');
 const userRouter = require('./routes/userRouts');
@@ -25,6 +26,11 @@ app.set('view engine', 'pug');
 
 app.set('views', path.join(__dirname, 'views'));
 // 1) GLOBAL MIDDLEWARES
+
+// Implement CORS
+app.use(cors());
+
+app.options('*', cors());
 
 // Serving static files
 app.use(expess.static(path.join(__dirname, 'public')));
