@@ -12,6 +12,7 @@ const signToken = (id) =>
   });
 
 const createSendToken = (user, statusCode, req, res) => {
+  // console.log(req);
   const token = signToken(user._id);
 
   res.cookie('jwt', token, {
@@ -19,7 +20,8 @@ const createSendToken = (user, statusCode, req, res) => {
       Date.now() + process.env.Jwt_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
     ),
     httpOnly: true,
-    secure: req.secure || req.headers('x-forwarded-proto') === 'https',
+    // secure: req.secure || req.headers('x-forwarded-proto') === 'https',
+    secure: req.secure || req.headers['x-forwarded-proto'] === 'https',
   });
   // Remove the password from the output
   user.password = undefined;
@@ -152,7 +154,7 @@ exports.isLoggedIn = async (req, res, next) => {
 
       // 2) Check if user still exists
       const currentUser = await User.findById(decoded.id);
-      console.log(currentUser);
+      // console.log(currentUser);
       if (!currentUser) {
         return next(
           new AppError(
