@@ -57,6 +57,14 @@ exports.getSignUpForm = (req, res) => {
   });
 };
 
+exports.getAddReviewForm = (req, res) => {
+  res.status(200).render('review', {
+    title: 'Add your review',
+    tourName: req.query.tourName,
+    tourId: req.query.tourId,
+  });
+};
+
 exports.getAccount = (req, res) => {
   res.status(200).render('account', {
     title: 'Your account',

@@ -4,6 +4,7 @@ import { bookTour } from './stripe';
 import { displayMap } from './mapbox';
 import { login, logout } from './login';
 import { signup } from './signup';
+import { addReview } from './review';
 import { updateSettings } from './updateSettings';
 import { showAlert } from './alerts';
 
@@ -11,10 +12,12 @@ import { showAlert } from './alerts';
 const mapBox = document.getElementById('map');
 const loginForm = document.querySelector('.form--login');
 const signupForm = document.querySelector('.form--signup');
+const reviewForm = document.querySelector('.form--review');
 const logOutBtn = document.querySelector('.nav__el--logout');
 const userDataForm = document.querySelector('.form-user-data');
 const userPasswordForm = document.querySelector('.form-user-password');
 const bookBtn = document.getElementById('book-tour');
+// const addReviewBtn = document.getElementById('add-review');
 
 // Delegation
 if (mapBox) {
@@ -41,6 +44,19 @@ if (signupForm) {
     const passwordConfirm = document.getElementById('passwordConfirm').value;
 
     signup(name, email, password, passwordConfirm);
+  });
+}
+
+if (reviewForm) {
+  reviewForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const review = document.getElementById('text').value;
+    const rating = document.getElementById('rating').value;
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const tourId = urlParams.get('tourId');
+
+    await addReview(review, rating, tourId);
   });
 }
 

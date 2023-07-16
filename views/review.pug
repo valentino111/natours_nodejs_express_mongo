@@ -1,0 +1,20 @@
+extends base
+
+block content
+    main.main
+        .login-form            
+            h2.heading-secondary.ma-bt-lg Review for #{tourName} tour
+            form.form--review
+                .form__group
+                    label.form__label(for='text') Review Text
+                    textarea#text.form__input(type='text', rows='5', placeholder='Please write at least a few words...', required)
+                .form__group.ma-bt-md
+                    label.form__label(for='rating') Rating
+                    select#rating.form__input(required)
+                        option(value='1') 1
+                        option(value='2') 2
+                        option(value='3') 3
+                        option(value='4') 4
+                        option(value='5', selected) 5
+                .form__group
+                    button.btn.btn--green Submit
