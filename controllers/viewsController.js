@@ -1,6 +1,7 @@
 const Tour = require('../models/tourModel');
 const User = require('../models/userModel');
 const Booking = require('../models/bookingModel');
+const Review = require('../models/reviewModel');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 
@@ -9,6 +10,19 @@ async function isTourBooked(res, tour) {
   const tourIDs = bookings.map((el) => el.tour.id);
   const isBooked = tourIDs.includes(tour.id);
   return isBooked;
+}
+
+async function isTourReviewed(res, tour) {
+  const reviews = await Review.find({
+    user: res.locals.user.id,
+    tour: tour.id,
+  });
+
+  console.log(reviews);
+
+  if (reviews.length > 0) return true;
+
+  return false;
 }
 
 exports.alerts = (req, res, next) => {
@@ -47,11 +61,16 @@ exports.getTour = catchAsync(async (req, res, next) => {
   const isBooked = await isTourBooked(res, tour);
   // res.locals.isBooked = isBooked;
 
-  // 3) Render template using data from 1)
+  // 3) Check if the tour was reviewed
+  const isReviewed = await isTourReviewed(res, tour);
+  console.log('isReviewed: ', isReviewed);
+
+  // 4) Render template using data from 1)
   res.status(200).render('tour', {
     title: `${tour.name} Tour`,
     tour,
     isBooked,
+    isReviewed,
   });
 });
 

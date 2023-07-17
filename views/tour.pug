@@ -96,8 +96,11 @@ block content
                 p.cta__text= `${tour.duration} days. 1 adventure. Infinite memories. Make it yours today!`
 
                 if user
-                    if isBooked               
-                        a.btn.btn--green(href=`/review?tourId=${tour.id}&tourName=${tour.name}`) Add review
+                    if isBooked
+                        if isReviewed               
+                            a.btn.btn--green(href='#') Edit Review
+                        else
+                            a.btn.btn--green(href=`/review?tourId=${tour.id}&tourName=${tour.name}`) Add Review
                     else    
                         button.btn.btn--green#book-tour(data-tour-id=`${tour.id}`) Book tour now!
                 else 
