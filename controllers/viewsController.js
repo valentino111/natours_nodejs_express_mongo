@@ -38,12 +38,11 @@ exports.getTour = catchAsync(async (req, res, next) => {
 
   // 2) Check if the tour is booked
   const bookings = await Booking.find({ user: res.locals.user.id });
-  // Find tours with the returned ids
-  const tours = bookings.map((el) => el.tour);
-  const tourIDs = tours.map((el) => el.id);
+  const tourIDs = bookings.map((el) => el.tour.id);
   const isBooked = tourIDs.includes(tour.id);
   // res.locals.isBooked = isBooked;
-  // 3) Render templateusing data from 1)
+
+  // 3) Render template using data from 1)
   res.status(200).render('tour', {
     title: `${tour.name} Tour`,
     tour,
