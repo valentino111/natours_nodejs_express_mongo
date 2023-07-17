@@ -4,6 +4,13 @@ const Booking = require('../models/bookingModel');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 
+async function isTourBooked(res, tour) {
+  const bookings = await Booking.find({ user: res.locals.user.id });
+  const tourIDs = bookings.map((el) => el.tour.id);
+  const isBooked = tourIDs.includes(tour.id);
+  return isBooked;
+}
+
 exports.alerts = (req, res, next) => {
   const { alert } = req.query;
   if (alert === 'booking') {
@@ -37,9 +44,7 @@ exports.getTour = catchAsync(async (req, res, next) => {
   }
 
   // 2) Check if the tour is booked
-  const bookings = await Booking.find({ user: res.locals.user.id });
-  const tourIDs = bookings.map((el) => el.tour.id);
-  const isBooked = tourIDs.includes(tour.id);
+  const isBooked = await isTourBooked(res, tour);
   // res.locals.isBooked = isBooked;
 
   // 3) Render template using data from 1)
