@@ -17,7 +17,7 @@ export const addReview = async (review, rating, tourId) => {
     if (res.data.status === 'success') {
       showAlert('success', 'Review Submitted Successfully!');
       window.setTimeout(() => {
-        location.assign('/');
+        location.assign('/my-reviews');
       }, 1500);
     }
   } catch (err) {
@@ -39,7 +39,7 @@ export const updateReview = async (reviewId, review, rating) => {
     if (res.data.status === 'success') {
       showAlert('success', 'Review Updated Successfully!');
       window.setTimeout(() => {
-        location.assign('/');
+        location.assign('/my-reviews');
       }, 1500);
     }
   } catch (err) {

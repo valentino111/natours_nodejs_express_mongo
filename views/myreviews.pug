@@ -1,0 +1,35 @@
+extends base
+
+block content 
+
+    main.main   
+        .card-container 
+
+            each  tour in reviewedTours
+                .card
+                    .card__header
+                        .card__picture
+                            .card__picture-overlay &nbsp;
+                            img.card__picture-img(src=`/img/tours/${tour.imageCover}`, alt=`${tour.name}`)
+                        h3.heading-tertirary
+                            span= tour.name
+
+                    .card__details
+                        h4.card__sub-heading= `${tour.difficulty} ${tour.duration}-day tour`
+                        - const tourReview = reviews.filter((review) => review.tour.toString() === tour.id);
+                        - const reviewId = tourReview.map((review) => review.id);
+                        - const reviewText = tourReview.map((review) => review.review);
+                        - const reviewRating = tourReview.map((review) => review.rating);
+                        p.card__text=reviewText
+                        
+
+                    .card__footer
+                        p
+                            span.card__footer-value= `$${tour.price}`
+                            | 
+                            span.card__footer-text per person
+                        p.card__ratings
+                            span.card__footer-value= reviewRating
+                            | 
+                            span.card__footer-text= `rating`
+                        a.btn.btn--green.btn--small(href=`/review?tourId=${tour.id}`) Edit

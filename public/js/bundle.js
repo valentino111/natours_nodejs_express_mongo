@@ -12399,7 +12399,7 @@ var addReview = /*#__PURE__*/function () {
           if (res.data.status === 'success') {
             (0, _alerts.showAlert)('success', 'Review Submitted Successfully!');
             window.setTimeout(function () {
-              location.assign('/');
+              location.assign('/my-reviews');
             }, 1500);
           }
           _context.next = 10;
@@ -12440,7 +12440,7 @@ var updateReview = /*#__PURE__*/function () {
           if (res.data.status === 'success') {
             (0, _alerts.showAlert)('success', 'Review Updated Successfully!');
             window.setTimeout(function () {
-              location.assign('/');
+              location.assign('/my-reviews');
             }, 1500);
           }
           _context2.next = 10;

@@ -124,6 +124,41 @@ exports.getMyTours = catchAsync(async (req, res, next) => {
   });
 });
 
+exports.getMyReviews = catchAsync(async (req, res, next) => {
+  // 1) Find our bookings
+  const bookings = await Booking.find({ user: req.user.id });
+
+  // 2) Find tours with the returned ids
+  const tourIDs = bookings.map((el) => el.tour);
+  // console.log('tourIDs: ', tourIDs);
+  const tours = await Tour.find({ _id: { $in: tourIDs } });
+  // console.log('tours: ', tours);
+  const reviews = await Review.find({ user: res.locals.user.id });
+  // console.log('reviews: ', reviews);
+  const tourIdsInReviews = reviews.map((review) => review.tour.toString());
+  // console.log('tourIdsInReviews: ', tourIdsInReviews);
+  const reviewedTours = tours.filter((tour) =>
+    tourIdsInReviews.includes(tour.id)
+  );
+
+  // const tourReviews = reviewedTours.map((tour) => {
+  // const tourReviewsText = reviews
+  //   .filter((review) => review.tour.toString() === tour.id)
+  //   .map((review) => review.review);
+
+  //   return {
+  //     ...tour,
+  //     reviews: tourReviewsText,
+  //   };
+  // });
+
+  res.status(200).render('myreviews', {
+    title: 'My Reviews',
+    reviewedTours,
+    reviews,
+  });
+});
+
 exports.updateUserData = catchAsync(async (req, res, next) => {
   const updatedUser = await User.findByIdAndUpdate(
     req.user.id,
