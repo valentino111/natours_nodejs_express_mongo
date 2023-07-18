@@ -7,7 +7,7 @@ block content
             form.form--review
                 .form__group
                     label.form__label(for='text') Review Text
-                    textarea#text.form__input(type='text', rows='5', placeholder='Please write at least a few words...', required)
+                    textarea#text.form__input(type='text', rows='5', placeholder='Please write at least a few words...', required) #{reviewText}
                 .form__group.ma-bt-md
                     label.form__label(for='rating') Rating
                     select#rating.form__input(required)
@@ -17,4 +17,5 @@ block content
                         option(value='4') 4
                         option(value='5', selected) 5
                 .form__group
+                    input#reviewId(type='hidden', value=reviewId)
                     button.btn.btn--green Submit

@@ -4,7 +4,7 @@ import { bookTour } from './stripe';
 import { displayMap } from './mapbox';
 import { login, logout } from './login';
 import { signup } from './signup';
-import { addReview } from './review';
+import { addReview, updateReview } from './review';
 import { updateSettings } from './updateSettings';
 import { showAlert } from './alerts';
 
@@ -55,8 +55,11 @@ if (reviewForm) {
 
     const urlParams = new URLSearchParams(window.location.search);
     const tourId = urlParams.get('tourId');
+    const reviewId = document.getElementById('reviewId').value;
+    console.log('reviewId: ', reviewId);
 
-    await addReview(review, rating, tourId);
+    if (!reviewId) await addReview(review, rating, tourId);
+    else await updateReview(reviewId, review, rating);
   });
 }
 

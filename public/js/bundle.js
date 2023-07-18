@@ -12370,7 +12370,7 @@ exports.signup = signup;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.addReview = void 0;
+exports.updateReview = exports.addReview = void 0;
 var _axios = _interopRequireDefault(require("axios"));
 var _alerts = require("./alerts");
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -12397,7 +12397,7 @@ var addReview = /*#__PURE__*/function () {
         case 3:
           res = _context.sent;
           if (res.data.status === 'success') {
-            (0, _alerts.showAlert)('success', 'Review Submitted successfully');
+            (0, _alerts.showAlert)('success', 'Review Submitted Successfully!');
             window.setTimeout(function () {
               location.assign('/');
             }, 1500);
@@ -12419,6 +12419,47 @@ var addReview = /*#__PURE__*/function () {
   };
 }();
 exports.addReview = addReview;
+var updateReview = /*#__PURE__*/function () {
+  var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(reviewId, review, rating) {
+    var res;
+    return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+      while (1) switch (_context2.prev = _context2.next) {
+        case 0:
+          _context2.prev = 0;
+          _context2.next = 3;
+          return (0, _axios.default)({
+            method: 'PATCH',
+            url: "/api/v1/reviews/".concat(reviewId),
+            data: {
+              rating: rating,
+              review: review
+            }
+          });
+        case 3:
+          res = _context2.sent;
+          if (res.data.status === 'success') {
+            (0, _alerts.showAlert)('success', 'Review Updated Successfully!');
+            window.setTimeout(function () {
+              location.assign('/');
+            }, 1500);
+          }
+          _context2.next = 10;
+          break;
+        case 7:
+          _context2.prev = 7;
+          _context2.t0 = _context2["catch"](0);
+          (0, _alerts.showAlert)('error', _context2.t0.response.data.message);
+        case 10:
+        case "end":
+          return _context2.stop();
+      }
+    }, _callee2, null, [[0, 7]]);
+  }));
+  return function updateReview(_x4, _x5, _x6) {
+    return _ref2.apply(this, arguments);
+  };
+}();
+exports.updateReview = updateReview;
 },{"axios":"../../node_modules/axios/index.js","./alerts":"alerts.js"}],"updateSettings.js":[function(require,module,exports) {
 "use strict";
 
@@ -12656,7 +12697,7 @@ if (signupForm) {
 if (reviewForm) {
   reviewForm.addEventListener('submit', /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(e) {
-      var review, rating, urlParams, tourId;
+      var review, rating, urlParams, tourId, reviewId;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
           case 0:
@@ -12665,9 +12706,21 @@ if (reviewForm) {
             rating = document.getElementById('rating').value;
             urlParams = new URLSearchParams(window.location.search);
             tourId = urlParams.get('tourId');
-            _context.next = 7;
+            reviewId = document.getElementById('reviewId').value;
+            console.log('reviewId: ', reviewId);
+            if (reviewId) {
+              _context.next = 12;
+              break;
+            }
+            _context.next = 10;
             return (0, _review.addReview)(review, rating, tourId);
-          case 7:
+          case 10:
+            _context.next = 14;
+            break;
+          case 12:
+            _context.next = 14;
+            return (0, _review.updateReview)(reviewId, review, rating);
+          case 14:
           case "end":
             return _context.stop();
         }
@@ -12762,7 +12815,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51498" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62582" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

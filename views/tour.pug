@@ -98,9 +98,9 @@ block content
                 if user
                     if isBooked
                         if isReviewed               
-                            a.btn.btn--green(href='#') Edit Review
+                            a.btn.btn--green(href=`/review?tourId=${tour.id}`) Edit Review
                         else
-                            a.btn.btn--green(href=`/review?tourId=${tour.id}&tourName=${tour.name}`) Add Review
+                            a.btn.btn--green(href=`/review?tourId=${tour.id}`) Add Review
                     else    
                         button.btn.btn--green#book-tour(data-tour-id=`${tour.id}`) Book tour now!
                 else 

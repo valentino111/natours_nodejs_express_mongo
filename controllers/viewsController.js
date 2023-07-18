@@ -12,17 +12,13 @@ async function isTourBooked(res, tour) {
   return isBooked;
 }
 
-async function isTourReviewed(res, tour) {
+async function getTourReviews(res, tour) {
   const reviews = await Review.find({
     user: res.locals.user.id,
     tour: tour.id,
   });
 
-  console.log(reviews);
-
-  if (reviews.length > 0) return true;
-
-  return false;
+  return reviews;
 }
 
 exports.alerts = (req, res, next) => {
@@ -62,8 +58,8 @@ exports.getTour = catchAsync(async (req, res, next) => {
   // res.locals.isBooked = isBooked;
 
   // 3) Check if the tour was reviewed
-  const isReviewed = await isTourReviewed(res, tour);
-  console.log('isReviewed: ', isReviewed);
+  const reviews = await getTourReviews(res, tour);
+  const isReviewed = reviews.length > 0;
 
   // 4) Render template using data from 1)
   res.status(200).render('tour', {
@@ -86,13 +82,27 @@ exports.getSignUpForm = (req, res) => {
   });
 };
 
-exports.getAddReviewForm = (req, res) => {
+exports.getAddReviewForm = catchAsync(async (req, res) => {
+  const tour = await Tour.find({ _id: req.query.tourId });
+  const reviews = await getTourReviews(res, tour[0]);
+  let reviewId;
+  let reviewText;
+  let selectedRating;
+  if (reviews.length > 0) {
+    reviewId = reviews[0].id;
+    reviewText = reviews[0].review;
+    selectedRating = reviews[0].rating;
+  }
+
   res.status(200).render('review', {
     title: 'Add your review',
-    tourName: req.query.tourName,
-    tourId: req.query.tourId,
+    tourName: tour[0].name,
+    tourId: tour[0].id,
+    reviewId,
+    reviewText,
+    selectedRating,
   });
-};
+});
 
 exports.getAccount = (req, res) => {
   res.status(200).render('account', {
