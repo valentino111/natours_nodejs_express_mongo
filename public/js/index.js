@@ -5,6 +5,7 @@ import { displayMap } from './mapbox';
 import { login, logout } from './login';
 import { signup } from './signup';
 import { addReview, updateReview } from './review';
+import { createFavorite, deleteFavorite } from './favorites';
 import { updateSettings } from './updateSettings';
 import { showAlert } from './alerts';
 
@@ -17,6 +18,8 @@ const logOutBtn = document.querySelector('.nav__el--logout');
 const userDataForm = document.querySelector('.form-user-data');
 const userPasswordForm = document.querySelector('.form-user-password');
 const bookBtn = document.getElementById('book-tour');
+const addFavoritesBtn = document.getElementById('add-favotites');
+const deleteFavoritesBtn = document.getElementById('remove-favotites');
 // const addReviewBtn = document.getElementById('add-review');
 
 // Delegation
@@ -102,11 +105,24 @@ if (userPasswordForm) {
 }
 
 if (bookBtn) {
-  // console.log('Btn');
   bookBtn.addEventListener('click', (e) => {
     e.target.textContent = 'Processing...';
     const { tourId } = e.target.dataset;
     bookTour(tourId);
+  });
+}
+
+if (addFavoritesBtn) {
+  addFavoritesBtn.addEventListener('click', (e) => {
+    const { tourId, userId } = e.target.dataset;
+    createFavorite(userId, tourId);
+  });
+}
+
+if (deleteFavoritesBtn) {
+  deleteFavoritesBtn.addEventListener('click', (e) => {
+    const { favoriteId } = e.target.dataset;
+    deleteFavorite(favoriteId);
   });
 }
 

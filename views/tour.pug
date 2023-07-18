@@ -103,5 +103,9 @@ block content
                             a.btn.btn--green(href=`/review?tourId=${tour.id}`) Add Review
                     else    
                         button.btn.btn--green#book-tour(data-tour-id=`${tour.id}`) Book tour now!
+                    if isFavotite
+                        button.btn.btn--green#remove-favotites(data-favorite-id=favoriteId) Remove from Favorites
+                    else
+                        button.btn.btn--green#add-favotites(data-tour-id=`${tour.id}`, data-user-id=`${user.id}`) Add to Favorites
                 else 
                     a.btn.btn--green.span-all-rows(href='/login') Log in to book a tour
