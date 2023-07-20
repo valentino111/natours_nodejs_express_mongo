@@ -20,7 +20,7 @@ const userPasswordForm = document.querySelector('.form-user-password');
 const bookBtn = document.getElementById('book-tour');
 const addFavoritesBtn = document.getElementById('add-favotites');
 const deleteFavoritesBtn = document.getElementById('remove-favotites');
-// const addReviewBtn = document.getElementById('add-review');
+const heartButtons = document.querySelectorAll('.btn.heart-button');
 
 // Delegation
 if (mapBox) {
@@ -115,6 +115,7 @@ if (bookBtn) {
 if (addFavoritesBtn) {
   addFavoritesBtn.addEventListener('click', (e) => {
     const { tourId, userId } = e.target.dataset;
+    // console.log('addFavoritesBtn:: tourId: ', tourId, 'userId: ', userId);
     createFavorite(userId, tourId);
   });
 }
@@ -122,7 +123,24 @@ if (addFavoritesBtn) {
 if (deleteFavoritesBtn) {
   deleteFavoritesBtn.addEventListener('click', (e) => {
     const { favoriteId } = e.target.dataset;
+    // console.log('favoriteId: ', favoriteId);
     deleteFavorite(favoriteId);
+  });
+}
+
+if (heartButtons) {
+  heartButtons.forEach((button) => {
+    button.addEventListener('click', async () => {
+      const favoriteId = button.dataset.favoriteId;
+      if (favoriteId) {
+        // console.log('heartButtons:: favoriteId: ', favoriteId);
+        deleteFavorite(favoriteId);
+      } else {
+        const { tourId, userId } = button.dataset;
+        // console.log('heartButtons:: tourId: ', tourId, 'userId: ', userId);
+        await createFavorite(userId, tourId);
+      }
+    });
   });
 }
 

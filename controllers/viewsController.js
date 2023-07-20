@@ -34,12 +34,19 @@ exports.alerts = (req, res, next) => {
 exports.getOverview = catchAsync(async (req, res) => {
   // 1) Get tour data from collection
   const tours = await Tour.find();
+
+  // Get favorites data
+  const toursWithFavorites = await getToursWithFavorites(res, tours);
+
+  // Now the `toursWithFavorites` array contains each tour with `isFavorite` and `favoriteId` properties.
+
   // 2) Build template
 
   // 3( Render that template using tour data from 1)
+  // console.log('tourWithFavorites: ', toursWithFavorites);
   res.status(200).render('overview', {
     title: 'All Tours',
-    tours,
+    toursWithFavorites,
   });
 });
 
@@ -125,10 +132,11 @@ exports.getMyTours = catchAsync(async (req, res, next) => {
   // 2) Find tours with the returned ids
   const tourIDs = bookings.map((el) => el.tour);
   const tours = await Tour.find({ _id: { $in: tourIDs } });
+  const toursWithFavorites = await getToursWithFavorites(res, tours);
 
   res.status(200).render('overview', {
     title: 'My Tours',
-    tours,
+    toursWithFavorites,
   });
 });
 
@@ -140,10 +148,11 @@ exports.getFavorites = catchAsync(async (req, res, next) => {
   // 2) Find tours with the returned ids
   const tourIDs = favorites.map((el) => el.tourId);
   const tours = await Tour.find({ _id: { $in: tourIDs } });
+  const toursWithFavorites = await getToursWithFavorites(res, tours);
 
   res.status(200).render('overview', {
     title: 'My Favorites',
-    tours,
+    toursWithFavorites,
   });
 });
 
@@ -200,3 +209,20 @@ exports.updateUserData = catchAsync(async (req, res, next) => {
     user: updatedUser,
   });
 });
+async function getToursWithFavorites(res, tours) {
+  const favorites = await Favorite.find({ userId: res.locals.user.id });
+  const tourIDs = favorites?.map((el) => el.tourId);
+
+  const toursWithFavorites = tours.map((tour) => {
+    const isFavorite = tourIDs?.includes(tour.id) ?? false;
+    const favorite = favorites?.find((el) => el.tourId === tour.id);
+    const favoriteId = favorite?.id;
+
+    return {
+      ...tour.toObject(),
+      isFavorite,
+      favoriteId,
+    };
+  });
+  return toursWithFavorites;
+}

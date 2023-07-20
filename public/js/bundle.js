@@ -12764,7 +12764,7 @@ var userPasswordForm = document.querySelector('.form-user-password');
 var bookBtn = document.getElementById('book-tour');
 var addFavoritesBtn = document.getElementById('add-favotites');
 var deleteFavoritesBtn = document.getElementById('remove-favotites');
-// const addReviewBtn = document.getElementById('add-review');
+var heartButtons = document.querySelectorAll('.btn.heart-button');
 
 // Delegation
 if (mapBox) {
@@ -12887,13 +12887,43 @@ if (addFavoritesBtn) {
     var _e$target$dataset = e.target.dataset,
       tourId = _e$target$dataset.tourId,
       userId = _e$target$dataset.userId;
+    // console.log('addFavoritesBtn:: tourId: ', tourId, 'userId: ', userId);
     (0, _favorites.createFavorite)(userId, tourId);
   });
 }
 if (deleteFavoritesBtn) {
   deleteFavoritesBtn.addEventListener('click', function (e) {
     var favoriteId = e.target.dataset.favoriteId;
+    // console.log('favoriteId: ', favoriteId);
     (0, _favorites.deleteFavorite)(favoriteId);
+  });
+}
+if (heartButtons) {
+  heartButtons.forEach(function (button) {
+    button.addEventListener('click', /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+      var favoriteId, _button$dataset, tourId, userId;
+      return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+        while (1) switch (_context3.prev = _context3.next) {
+          case 0:
+            favoriteId = button.dataset.favoriteId;
+            if (!favoriteId) {
+              _context3.next = 5;
+              break;
+            }
+            // console.log('heartButtons:: favoriteId: ', favoriteId);
+            (0, _favorites.deleteFavorite)(favoriteId);
+            _context3.next = 8;
+            break;
+          case 5:
+            _button$dataset = button.dataset, tourId = _button$dataset.tourId, userId = _button$dataset.userId; // console.log('heartButtons:: tourId: ', tourId, 'userId: ', userId);
+            _context3.next = 8;
+            return (0, _favorites.createFavorite)(userId, tourId);
+          case 8:
+          case "end":
+            return _context3.stop();
+        }
+      }, _callee3);
+    })));
   });
 }
 var alertMessage = document.querySelector('body').dataset.alert;
@@ -12923,7 +12953,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62582" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "63848" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

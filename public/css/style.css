@@ -1322,3 +1322,17 @@ body {
   -webkit-transform: translateY(-2px);
   transform: translateY(-2px);
 }
+
+.btn--like {
+  color: green;
+}
+
+.heart-button {
+  width: 50px; /* Adjust the width as needed */
+  height: 50px; /* Adjust the height as needed */
+  border: none; /* Remove the default button border */
+  background-color: transparent; /* Set the button background to transparent */
+  cursor: pointer; /* Add a pointer cursor for interaction */
+  outline: none; /* Remove the default button focus outline */
+  padding: 0; /* Remove padding to allow the heart icon to occupy the full button area */
+}
