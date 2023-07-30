@@ -17,9 +17,10 @@ export const bookTour = async (tourId) => {
     const stripe = await loadStripe(stripePublicKey);
 
     // 3) Redirect to checkout
-    await stripe.redirectToCheckout({
+    const stripePromise = await stripe.redirectToCheckout({
       sessionId: session.id,
     });
+    console.log('stripePromise: ', stripePromise);
   } catch (err) {
     console.log(err);
     showAlert('error', err.response.data.message);

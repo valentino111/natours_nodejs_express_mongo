@@ -25,18 +25,20 @@ async function getTourReviews(res, tour) {
 exports.alerts = (req, res, next) => {
   const { alert } = req.query;
   if (alert === 'booking') {
-    res.locals.alert =
-      'Your booking was successful! Please check your email for a confirmation. If your booking does not show up here immediately, please come back later.';
+    res.locals.alert = 'Your booking was successful!';
   }
   next();
 };
 
 exports.getOverview = catchAsync(async (req, res) => {
   // 1) Get tour data from collection
-  const tours = await Tour.find();
+  let tours = await Tour.find();
+  console.log(tours);
 
   // Get favorites data
-  const toursWithFavorites = await getToursWithFavorites(res, tours);
+  if (res.locals.user) {
+    tours = await getToursWithFavorites(res, tours);
+  }
 
   // Now the `toursWithFavorites` array contains each tour with `isFavorite` and `favoriteId` properties.
 
@@ -46,7 +48,7 @@ exports.getOverview = catchAsync(async (req, res) => {
   // console.log('tourWithFavorites: ', toursWithFavorites);
   res.status(200).render('overview', {
     title: 'All Tours',
-    toursWithFavorites,
+    tours,
   });
 });
 
@@ -62,6 +64,12 @@ exports.getTour = catchAsync(async (req, res, next) => {
   }
 
   // 2) Check if the tour is booked
+  if (!res.locals.user) {
+    return res.status(200).render('tour', {
+      title: `${tour.name} Tour`,
+      tour,
+    });
+  }
   const isBooked = await isTourBooked(res, tour);
   // res.locals.isBooked = isBooked;
 
@@ -131,12 +139,12 @@ exports.getMyTours = catchAsync(async (req, res, next) => {
 
   // 2) Find tours with the returned ids
   const tourIDs = bookings.map((el) => el.tour);
-  const tours = await Tour.find({ _id: { $in: tourIDs } });
-  const toursWithFavorites = await getToursWithFavorites(res, tours);
+  let tours = await Tour.find({ _id: { $in: tourIDs } });
+  tours = await getToursWithFavorites(res, tours);
 
   res.status(200).render('overview', {
     title: 'My Tours',
-    toursWithFavorites,
+    tours,
   });
 });
 
@@ -147,12 +155,12 @@ exports.getFavorites = catchAsync(async (req, res, next) => {
 
   // 2) Find tours with the returned ids
   const tourIDs = favorites.map((el) => el.tourId);
-  const tours = await Tour.find({ _id: { $in: tourIDs } });
-  const toursWithFavorites = await getToursWithFavorites(res, tours);
+  let tours = await Tour.find({ _id: { $in: tourIDs } });
+  tours = await getToursWithFavorites(res, tours);
 
   res.status(200).render('overview', {
     title: 'My Favorites',
-    toursWithFavorites,
+    tours,
   });
 });
 
