@@ -41,7 +41,7 @@ build/Release
 node_modules/
 jspm_packages/
 
-# users images
+# ignore users images
 public/img/users
 
 # TypeScript v1 declaration files
