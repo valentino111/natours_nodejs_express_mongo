@@ -42,7 +42,7 @@ node_modules/
 jspm_packages/
 
 # users images
-public/img/users/
+public/img/users
 
 # TypeScript v1 declaration files
 typings/
