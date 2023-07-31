@@ -12178,10 +12178,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.displayMap = void 0;
-/* eslint-disable */
-
-// const { doc } = require('prettier');
-
+// ...
 var displayMap = function displayMap(locations) {
   mapboxgl.accessToken = 'pk.eyJ1IjoidmFsZW50aW0xMTEiLCJhIjoiY2xpOTA2eG5uNDBxNzNqbXc0ZGIxMHhvayJ9.FmEfvbfFPZiF1vwkyb8Myg';
   var map = new mapboxgl.Map({
@@ -12205,9 +12202,20 @@ var displayMap = function displayMap(locations) {
     }).setLngLat(loc.coordinates).addTo(map);
 
     // Add popup
-    new mapboxgl.Popup({
+    var popup = new mapboxgl.Popup({
       offset: 30
+      // closeOnClick: false, // Prevent popup from closing when clicking on the map
     }).setLngLat(loc.coordinates).setHTML("<p>Day ".concat(loc.day, ": ").concat(loc.description, "</p>")).addTo(map);
+
+    // Show the popup when hovering over the marker
+    el.addEventListener('mouseenter', function () {
+      popup.addTo(map);
+    });
+
+    // Hide the popup when the mouse leaves the marker
+    el.addEventListener('mouseleave', function () {
+      popup.remove();
+    });
 
     // Extend the map bounds to include current location
     bounds.extend(loc.coordinates);
@@ -12592,9 +12600,9 @@ var updateSettings = /*#__PURE__*/function () {
           res = _context.sent;
           if (res.data.status === 'success') {
             (0, _alerts.showAlert)('success', "".concat(type.toUpperCase(), " updated successfully"));
-            //   window.setTimeout(() => {
-            //     location.assign('/');
-            //   }, 1500);
+            window.setTimeout(function () {
+              location.assign('/me');
+            }, 1500);
           }
           _context.next = 11;
           break;
@@ -12960,7 +12968,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54371" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58238" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

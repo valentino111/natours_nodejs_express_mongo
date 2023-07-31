@@ -1,7 +1,4 @@
-/* eslint-disable */
-
-// const { doc } = require('prettier');
-
+// ...
 export const displayMap = (locations) => {
   mapboxgl.accessToken =
     'pk.eyJ1IjoidmFsZW50aW0xMTEiLCJhIjoiY2xpOTA2eG5uNDBxNzNqbXc0ZGIxMHhvayJ9.FmEfvbfFPZiF1vwkyb8Myg';
@@ -30,12 +27,23 @@ export const displayMap = (locations) => {
       .addTo(map);
 
     // Add popup
-    new mapboxgl.Popup({
+    const popup = new mapboxgl.Popup({
       offset: 30,
+      // closeOnClick: false, // Prevent popup from closing when clicking on the map
     })
       .setLngLat(loc.coordinates)
       .setHTML(`<p>Day ${loc.day}: ${loc.description}</p>`)
       .addTo(map);
+
+    // Show the popup when hovering over the marker
+    el.addEventListener('mouseenter', () => {
+      popup.addTo(map);
+    });
+
+    // Hide the popup when the mouse leaves the marker
+    el.addEventListener('mouseleave', () => {
+      popup.remove();
+    });
 
     // Extend the map bounds to include current location
     bounds.extend(loc.coordinates);
